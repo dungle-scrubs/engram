@@ -1,0 +1,4 @@
+bun run format
+git add --update
+bun run lint
+bun run typecheck

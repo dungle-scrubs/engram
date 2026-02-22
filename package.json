@@ -15,8 +15,13 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"dev": "bun run src/cli.ts",
-		"lint": "biome check src",
-		"lint:fix": "biome check --write src",
+		"format": "biome format --write src test",
+		"format:check": "biome format src test",
+		"lint": "biome check src test",
+		"lint:fix": "biome check --write src test",
+		"prepare": "husky",
+		"test": "bun test",
+		"test:watch": "bun test --watch",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -24,9 +29,10 @@
 		"drizzle-orm": "^0.44.7"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.4.2",
+		"@biomejs/biome": "^2.4.4",
 		"@types/bun": "^1.3.2",
 		"drizzle-kit": "^0.31.7",
+		"husky": "^9.1.7",
 		"typescript": "^5.9.3"
 	}
 }

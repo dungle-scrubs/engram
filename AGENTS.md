@@ -33,6 +33,9 @@ bun run dev -- verify-backup --path ~/Backups/engram/snapshot-<timestamp>
 
 ```bash
 # Quality + build
+bun run format
+bun run format:check
+bun run test
 bun run typecheck
 bun run lint
 bun run lint:fix
@@ -47,10 +50,17 @@ bun run db:migrate
 
 ### Tests
 
-- There is currently **no test script and no test files**
-  (`*.test.ts` / `*.spec.ts`) in this repository.
-- A “run a single test” command is not applicable until a test runner
-  and tests are added.
+- Test runner: Bun (`bun test`)
+- Run all tests: `bun run test`
+- Watch mode: `bun run test:watch`
+- Run a single test file: `bun test test/storage-backup-paths.test.ts`
+- Run a single test by name: `bun test -t "checksum manifest"`
+
+### Git hooks
+
+- Husky is enabled via `bun run prepare` (also runs on `bun install`).
+- Pre-commit hook runs: `bun run format`, `bun run lint`,
+  and `bun run typecheck`.
 
 ## Architecture (big picture)
 
