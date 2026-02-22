@@ -1,6 +1,6 @@
 {
 	"name": "engram",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"private": true,
 	"description": "Cheap-first evaluation runner and result store for multi-model routing",
 	"author": "Kevin Frilot",
