@@ -15,8 +15,10 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"dev": "bun run src/cli.ts",
-		"lint": "biome check src",
-		"lint:fix": "biome check --write src",
+		"lint": "biome check src test",
+		"lint:fix": "biome check --write src test",
+		"test": "bun test",
+		"test:watch": "bun test --watch",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {

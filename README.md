@@ -59,6 +59,7 @@ engram verify-backup --path ~/Backups/engram/snapshot-2026-02-21T16-00-00.000Z
 ## Development
 
 ```bash
+bun run test
 bun run typecheck
 bun run lint
 bun run build
