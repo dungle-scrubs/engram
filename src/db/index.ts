@@ -20,6 +20,7 @@ export function createEngramDb(): EngramDb {
 	const sqlite = new Database(dbPath, { create: true, strict: true });
 	sqlite.exec("PRAGMA journal_mode = WAL;");
 	sqlite.exec("PRAGMA synchronous = NORMAL;");
+	sqlite.exec("PRAGMA foreign_keys = ON;");
 	const db = drizzle(sqlite);
 	return { db, dbPath, sqlite };
 }

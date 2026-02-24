@@ -17,7 +17,7 @@ export function initializeSchema(sqlite: Database): void {
 
 		CREATE TABLE IF NOT EXISTS prompts (
 			id TEXT PRIMARY KEY NOT NULL,
-			dataset_id TEXT NOT NULL,
+			dataset_id TEXT NOT NULL REFERENCES datasets(id),
 			prompt TEXT NOT NULL,
 			prompt_hash TEXT NOT NULL,
 			task_type TEXT NOT NULL,
@@ -26,7 +26,7 @@ export function initializeSchema(sqlite: Database): void {
 
 		CREATE TABLE IF NOT EXISTS runs (
 			id TEXT PRIMARY KEY NOT NULL,
-			dataset_id TEXT NOT NULL,
+			dataset_id TEXT NOT NULL REFERENCES datasets(id),
 			policy_version TEXT NOT NULL,
 			git_sha TEXT,
 			created_at_ms INTEGER NOT NULL
@@ -34,8 +34,8 @@ export function initializeSchema(sqlite: Database): void {
 
 		CREATE TABLE IF NOT EXISTS results (
 			id TEXT PRIMARY KEY NOT NULL,
-			run_id TEXT NOT NULL,
-			prompt_id TEXT NOT NULL,
+			run_id TEXT NOT NULL REFERENCES runs(id),
+			prompt_id TEXT NOT NULL REFERENCES prompts(id),
 			provider TEXT NOT NULL,
 			model TEXT NOT NULL,
 			params_hash TEXT NOT NULL,

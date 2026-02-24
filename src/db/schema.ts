@@ -18,7 +18,9 @@ export const promptsTable = sqliteTable(
 	"prompts",
 	{
 		createdAtMs: integer("created_at_ms").notNull(),
-		datasetId: text("dataset_id").notNull(),
+		datasetId: text("dataset_id")
+			.notNull()
+			.references(() => datasetsTable.id),
 		id: text("id").primaryKey(),
 		prompt: text("prompt").notNull(),
 		promptHash: text("prompt_hash").notNull(),
@@ -36,7 +38,9 @@ export const runsTable = sqliteTable(
 	"runs",
 	{
 		createdAtMs: integer("created_at_ms").notNull(),
-		datasetId: text("dataset_id").notNull(),
+		datasetId: text("dataset_id")
+			.notNull()
+			.references(() => datasetsTable.id),
 		gitSha: text("git_sha"),
 		id: text("id").primaryKey(),
 		policyVersion: text("policy_version").notNull(),
@@ -57,9 +61,13 @@ export const resultsTable = sqliteTable(
 		model: text("model").notNull(),
 		outputRef: text("output_ref"),
 		paramsHash: text("params_hash").notNull(),
-		promptId: text("prompt_id").notNull(),
+		promptId: text("prompt_id")
+			.notNull()
+			.references(() => promptsTable.id),
 		provider: text("provider").notNull(),
-		runId: text("run_id").notNull(),
+		runId: text("run_id")
+			.notNull()
+			.references(() => runsTable.id),
 		score: real("score"),
 		success: integer("success", { mode: "boolean" }).notNull(),
 	},
