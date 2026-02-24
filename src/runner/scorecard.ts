@@ -16,12 +16,21 @@ export interface DailyScorecard {
  * @param sqlite - SQLite database handle
  * @param date - UTC date string (`YYYY-MM-DD`)
  * @returns Aggregate scorecard
+ * @throws Error when the date is not a valid UTC date string
  */
 export function buildDailyScorecard(
 	sqlite: Database,
 	date: string,
 ): DailyScorecard {
+	if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+		throw new Error(`Invalid UTC date format: ${date}`);
+	}
+
 	const dayStart = Date.parse(`${date}T00:00:00.000Z`);
+	if (Number.isNaN(dayStart)) {
+		throw new Error(`Invalid UTC date value: ${date}`);
+	}
+
 	const dayEnd = dayStart + 24 * 60 * 60 * 1000;
 
 	const rows = sqlite

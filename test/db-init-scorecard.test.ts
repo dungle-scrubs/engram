@@ -71,6 +71,19 @@ describe("buildDailyScorecard", () => {
 		}
 	});
 
+	test("throws when date format is invalid", () => {
+		const sqlite = new Database(":memory:", { strict: true });
+
+		try {
+			initializeSchema(sqlite);
+			expect(() => buildDailyScorecard(sqlite, "bad-date")).toThrow(
+				"Invalid UTC date format: bad-date",
+			);
+		} finally {
+			sqlite.close();
+		}
+	});
+
 	test("computes daily metrics from matching rows only", () => {
 		const sqlite = new Database(":memory:", { strict: true });
 
