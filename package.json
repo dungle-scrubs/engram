@@ -1,13 +1,27 @@
 {
-	"name": "engram",
+	"name": "@dungle-scrubs/engram",
 	"version": "0.1.1",
-	"private": true,
 	"description": "Cheap-first evaluation runner and result store for multi-model routing",
 	"author": "Kevin Frilot",
 	"license": "MIT",
 	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"files": [
+		"dist"
+	],
 	"bin": {
 		"engram": "./dist/cli.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dungle-scrubs/engram.git"
 	},
 	"packageManager": "bun@1.3.9",
 	"scripts": {
