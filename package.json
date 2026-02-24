@@ -1,6 +1,6 @@
 {
 	"name": "@dungle-scrubs/engram",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Cheap-first evaluation runner and result store for multi-model routing",
 	"author": "Kevin Frilot",
 	"license": "MIT",
