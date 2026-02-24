@@ -33,6 +33,7 @@ describe("initializeSchema", () => {
 
 			for (const indexName of [
 				"idx_prompts_dataset",
+				"idx_results_created_at",
 				"idx_results_model",
 				"idx_results_prompt",
 				"idx_results_run",

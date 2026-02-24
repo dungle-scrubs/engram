@@ -65,5 +65,6 @@ export function initializeSchema(sqlite: Database): void {
 		CREATE INDEX IF NOT EXISTS idx_results_model ON results(model);
 		CREATE INDEX IF NOT EXISTS idx_results_success ON results(success);
 		CREATE UNIQUE INDEX IF NOT EXISTS uidx_artifacts_sha256 ON artifacts(sha256);
+		CREATE INDEX IF NOT EXISTS idx_results_created_at ON results(created_at_ms);
 	`);
 }

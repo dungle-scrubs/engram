@@ -72,6 +72,7 @@ export const resultsTable = sqliteTable(
 		success: integer("success", { mode: "boolean" }).notNull(),
 	},
 	(table) => ({
+		createdAtIndex: index("idx_results_created_at").on(table.createdAtMs),
 		modelIndex: index("idx_results_model").on(table.model),
 		promptIndex: index("idx_results_prompt").on(table.promptId),
 		runIndex: index("idx_results_run").on(table.runId),
