@@ -123,6 +123,49 @@ describe("backup snapshots", () => {
 		}
 	});
 
+	test("reports missing files that are listed in the manifest", () => {
+		const rootPath = mkdtempSync(join(tmpdir(), "engram-backup-missing-file-"));
+
+		try {
+			const dataDir = join(rootPath, "data");
+			const backupDir = join(rootPath, "backups");
+			const dbPath = join(dataDir, "engram.sqlite");
+
+			process.env.ENGRAM_DATA_DIR = dataDir;
+			process.env.ENGRAM_DB_PATH = dbPath;
+
+			mkdirSync(join(dataDir, "artifacts"), { recursive: true });
+			writeFileSync(dbPath, "sqlite-placeholder");
+			writeFileSync(join(dataDir, "artifacts", "artifact-1.txt"), "artifact");
+
+			const snapshotDir = createBackupSnapshot(backupDir);
+			rmSync(join(snapshotDir, "artifacts", "artifact-1.txt"), {
+				force: true,
+			});
+
+			const result = verifyBackupSnapshot(snapshotDir);
+			expect(result.ok).toBe(false);
+			expect(result.mismatches).toContain("artifacts/artifact-1.txt: missing");
+		} finally {
+			rmSync(rootPath, { force: true, recursive: true });
+		}
+	});
+
+	test("returns a clear failure when manifest.json is invalid", () => {
+		const rootPath = mkdtempSync(
+			join(tmpdir(), "engram-backup-invalid-manifest-"),
+		);
+
+		try {
+			writeFileSync(join(rootPath, "manifest.json"), "{ invalid json }");
+			const result = verifyBackupSnapshot(rootPath);
+			expect(result.ok).toBe(false);
+			expect(result.mismatches).toEqual(["manifest.json invalid"]);
+		} finally {
+			rmSync(rootPath, { force: true, recursive: true });
+		}
+	});
+
 	test("returns a clear failure when manifest.json is missing", () => {
 		const rootPath = mkdtempSync(join(tmpdir(), "engram-backup-no-manifest-"));
 

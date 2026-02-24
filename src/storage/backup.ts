@@ -1,3 +1,4 @@
+import { Database } from "bun:sqlite";
 import { createHash } from "node:crypto";
 import {
 	copyFileSync,
@@ -77,6 +78,20 @@ export function createBackupSnapshot(destinationRoot: string): string {
 	const snapshotDir = resolve(join(destinationRoot, snapshotName));
 	mkdirSync(snapshotDir, { recursive: true });
 
+	// Flush WAL to main database file so the copy is self-contained.
+	// Best-effort: the source may not be WAL-mode or may not be open
+	// by another connection, in which case the checkpoint is a no-op.
+	try {
+		const sourceDb = new Database(sourceDbPath, { readonly: true });
+		try {
+			sourceDb.exec("PRAGMA wal_checkpoint(TRUNCATE);");
+		} finally {
+			sourceDb.close();
+		}
+	} catch {
+		// Not a valid SQLite DB or checkpoint not applicable — proceed with raw copy.
+	}
+
 	const copiedDbPath = join(snapshotDir, basename(sourceDbPath));
 	copyFileSync(sourceDbPath, copiedDbPath);
 
@@ -129,9 +144,15 @@ export function verifyBackupSnapshot(snapshotDir: string): {
 		return { mismatches: ["manifest.json missing"], ok: false };
 	}
 
-	const manifest = JSON.parse(
-		readFileSync(manifestPath, "utf-8"),
-	) as BackupManifest;
+	let manifest: BackupManifest;
+	try {
+		manifest = JSON.parse(
+			readFileSync(manifestPath, "utf-8"),
+		) as BackupManifest;
+	} catch {
+		return { mismatches: ["manifest.json invalid"], ok: false };
+	}
+
 	const mismatches: string[] = [];
 
 	for (const file of manifest.files) {
